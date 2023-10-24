@@ -153,7 +153,7 @@
           }
         ],
         "requestBody": {
-          "description": "New substation data",
+          "description": "New substation metadata",
           "content": {
             "application/json": {
               "schema": {
@@ -194,59 +194,39 @@
         "tags": [
           "datadelivery"
         ],
-        "summary": "searches inventory",
-        "description": "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
+        "summary": "Deliver data for a substation",
+        "description": "Deliver data for a substation\n",
         "operationId": "substationData",
         "parameters": [
           {
-            "name": "searchString",
+            "name": "substationId",
             "in": "query",
-            "description": "pass an optional search string for looking up inventory",
+            "description": "the id of the substation for which the data is being delivered",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "skip",
-            "in": "query",
-            "description": "number of records to skip for pagination",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "maximum number of records to return",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "maximum": 50,
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Substation data to deliver",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "result for forecast/temperature",
+            "description": "Data saved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ResultForecastTemperature"
-                  }
+                  "$ref": "#/components/schemas/SuccessResponse"
                 }
               }
             }
@@ -388,6 +368,22 @@
   },
   "components": {
     "schemas": {
+      "SuccessResponse": {
+        "required": [
+          "data",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Data was succesfully saved"
+          },
+          "data": {
+            "$ref": "#/components/schemas/SuccessResponse_data"
+          }
+        }
+      },
       "ErrorResponse": {
         "required": [
           "code",
@@ -483,9 +479,11 @@
       },
       "ErrorCode": {
         "type": "string",
+        "description": "INVALID_INPUT_DATA - Some of the input data was invalid, see message for details\nAPPLICATION_ERROR - There was an error in the application\n",
         "example": "INVALID_INPUT_DATA",
         "enum": [
-          "INVALID_INPUT_DATA"
+          "INVALID_INPUT_DATA",
+          "APPLICATION_ERROR"
         ]
       },
       "WarningCode": {
@@ -503,6 +501,14 @@
           },
           "transformer": {
             "$ref": "#/components/schemas/TransformerMetadata"
+          }
+        }
+      },
+      "SuccessResponse_data": {
+        "type": "object",
+        "properties": {
+          "substationId": {
+            "type": "string"
           }
         }
       },
