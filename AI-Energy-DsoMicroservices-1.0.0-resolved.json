@@ -558,7 +558,7 @@
       "ResultForecastTemperature_result_contributors": {
         "type": "object",
         "properties": {
-          "conrtibutor": {
+          "contributor": {
             "type": "string"
           },
           "percentage": {
