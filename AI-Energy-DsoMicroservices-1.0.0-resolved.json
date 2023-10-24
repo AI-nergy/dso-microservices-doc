@@ -1,0 +1,559 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "DSO Microservices API",
+    "description": "Microservices for gathering and analysing the data from DSOs",
+    "contact": {
+      "email": "info@ai-nergy.net"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/AI-Energy/DsoMicroservices/1.0.0",
+      "description": "SwaggerHub API Auto Mocking"
+    },
+    {
+      "url": "https://virtserver.swaggerhub.com/AI-Energy/DSO-Microservices/1.0.0",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "metadata",
+      "description": "Endpoints for managing metadata"
+    },
+    {
+      "name": "datadelivery",
+      "description": "Endpoints for delivering data"
+    },
+    {
+      "name": "results",
+      "description": "Endpoints for getting the results"
+    }
+  ],
+  "paths": {
+    "/substation/activate": {
+      "post": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "activates a substation",
+        "description": "Activates the substation and starts the billing\n",
+        "operationId": "substationActivate",
+        "parameters": [
+          {
+            "name": "substationId",
+            "in": "query",
+            "description": "pass an optional search string for looking up inventory",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "substation was succesfully activated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Substation activated"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or error in the API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/substation/deactivate": {
+      "post": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "deactivates a substation",
+        "description": "Deactivates the substation and ends the billing\n",
+        "operationId": "substationDeactivate",
+        "parameters": [
+          {
+            "name": "substationId",
+            "in": "query",
+            "description": "pass an optional search string for looking up inventory",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "search results matching criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResultForecastTemperature"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or error in the API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/substation/update": {
+      "post": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "updates metadata for a station",
+        "description": "Updates metadata for a station, should be called only when metadata changes. Can be changed only for an activated substation\n",
+        "operationId": "substationUpdate",
+        "parameters": [
+          {
+            "name": "substationId",
+            "in": "query",
+            "description": "Id of the substation for which to update the data",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "New substation data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/substation_update_body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "search results matching criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SubstationMetadata"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or error in the API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/substation/data": {
+      "post": {
+        "tags": [
+          "datadelivery"
+        ],
+        "summary": "searches inventory",
+        "description": "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
+        "operationId": "substationData",
+        "parameters": [
+          {
+            "name": "searchString",
+            "in": "query",
+            "description": "pass an optional search string for looking up inventory",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "number of records to skip for pagination",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "maximum number of records to return",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "maximum": 50,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result for forecast/temperature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResultForecastTemperature"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or error in the API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forecast/temperature": {
+      "get": {
+        "tags": [
+          "results"
+        ],
+        "summary": "adds an inventory item",
+        "description": "Adds an item to the system",
+        "operationId": "addInventory2",
+        "parameters": [
+          {
+            "name": "substationId",
+            "in": "query",
+            "description": "the id of the substation for which to get the data",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "item created"
+          },
+          "400": {
+            "description": "Invalid input data or error in the API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analysis/phaseimbalance": {
+      "get": {
+        "tags": [
+          "results"
+        ],
+        "summary": "adds an inventory item",
+        "description": "Adds an item to the system",
+        "operationId": "addInventory",
+        "parameters": [
+          {
+            "name": "substationId",
+            "in": "query",
+            "description": "the id of the substation for which to get the data",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "item created"
+          },
+          "400": {
+            "description": "Invalid input data or error in the API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analysis/voltagedeviation": {
+      "get": {
+        "tags": [
+          "results"
+        ],
+        "summary": "calculate the voltage deviation",
+        "description": "Calculates the voltage deviation from the delivered data for the specified subsation",
+        "operationId": "analysisVoltagedeviation",
+        "parameters": [
+          {
+            "name": "substationId",
+            "in": "query",
+            "description": "the id of the substation for which to get the data",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "item created"
+          },
+          "400": {
+            "description": "Invalid input data or error in the API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "INVALID_INPUT_DATA"
+          },
+          "data": {
+            "type": "object",
+            "example": {
+              "substationId": "missing field"
+            }
+          }
+        }
+      },
+      "ResultWarning": {
+        "required": [
+          "code",
+          "data",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "WARNING_ACCURACCY_LOW_INPUT"
+          },
+          "message": {
+            "type": "string",
+            "example": "We have enough input data to do the calculation but no enough for high accuracy"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "SubstationMetadata": {
+        "required": [
+          "id",
+          "substation",
+          "transformer"
+        ],
+        "type": "object",
+        "properties": {
+          "substation": {
+            "$ref": "#/components/schemas/SubstationMetadata_substation"
+          }
+        }
+      },
+      "TransformerMetadata": {
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/TransformerMetadata_metadata"
+          }
+        }
+      },
+      "Location": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "elevation": {
+            "type": "number"
+          }
+        }
+      },
+      "ResultForecastTemperature": {
+        "required": [
+          "id",
+          "manufacturer",
+          "name",
+          "releaseDate"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "example": "Widget Adapter"
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2016-08-29T09:12:33.001Z"
+          }
+        }
+      },
+      "Manufacturer": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "ACME Corporation"
+          },
+          "homePage": {
+            "type": "string",
+            "format": "url",
+            "example": "https://www.acme-corp.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "408-867-5309"
+          }
+        }
+      },
+      "substation_update_body": {
+        "type": "object",
+        "properties": {
+          "substation": {
+            "$ref": "#/components/schemas/SubstationMetadata"
+          },
+          "transformer": {
+            "$ref": "#/components/schemas/TransformerMetadata"
+          }
+        }
+      },
+      "SubstationMetadata_substation_metadata": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "model": {
+            "type": "object"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "transformer": {
+            "type": "object"
+          }
+        }
+      },
+      "SubstationMetadata_substation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/SubstationMetadata_substation_metadata"
+          }
+        }
+      },
+      "TransformerMetadata_metadata": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "model": {
+            "type": "object"
+          },
+          "namepolate": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}
