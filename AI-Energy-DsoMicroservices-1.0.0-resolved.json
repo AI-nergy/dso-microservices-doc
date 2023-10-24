@@ -287,7 +287,14 @@
         ],
         "responses": {
           "201": {
-            "description": "item created"
+            "description": "Gives the temperature forecats for given subsatationId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultForecastTemperature"
+                }
+              }
+            }
           },
           "400": {
             "description": "Invalid input data or error in the API",
@@ -389,8 +396,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "string",
-            "example": "INVALID_INPUT_DATA"
+            "$ref": "#/components/schemas/ErrorCode"
           },
           "data": {
             "type": "object",
@@ -409,8 +415,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "string",
-            "example": "WARNING_ACCURACCY_LOW_INPUT"
+            "$ref": "#/components/schemas/WarningCode"
           },
           "message": {
             "type": "string",
@@ -458,47 +463,37 @@
       },
       "ResultForecastTemperature": {
         "required": [
-          "id",
-          "manufacturer",
-          "name",
-          "releaseDate"
+          "result"
         ],
         "type": "object",
         "properties": {
           "id": {
             "type": "string"
           },
-          "name": {
-            "type": "string",
-            "example": "Widget Adapter"
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultWarning"
+            }
           },
-          "releaseDate": {
-            "type": "string",
-            "format": "date-time",
-            "example": "2016-08-29T09:12:33.001Z"
+          "result": {
+            "$ref": "#/components/schemas/ResultForecastTemperature_result"
           }
         }
       },
-      "Manufacturer": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "ACME Corporation"
-          },
-          "homePage": {
-            "type": "string",
-            "format": "url",
-            "example": "https://www.acme-corp.com"
-          },
-          "phone": {
-            "type": "string",
-            "example": "408-867-5309"
-          }
-        }
+      "ErrorCode": {
+        "type": "string",
+        "example": "INVALID_INPUT_DATA",
+        "enum": [
+          "INVALID_INPUT_DATA"
+        ]
+      },
+      "WarningCode": {
+        "type": "string",
+        "example": "WARNING_ACCURACCY_LOW_INPUT",
+        "enum": [
+          "WARNING_ACCURACCY_LOW_INPUT"
+        ]
       },
       "substation_update_body": {
         "type": "object",
@@ -551,6 +546,40 @@
           },
           "namepolate": {
             "type": "object"
+          }
+        }
+      },
+      "ResultForecastTemperature_result_contributors": {
+        "type": "object",
+        "properties": {
+          "conrtibutor": {
+            "type": "string"
+          },
+          "percentage": {
+            "type": "number"
+          }
+        }
+      },
+      "ResultForecastTemperature_result": {
+        "type": "object",
+        "properties": {
+          "expected": {
+            "type": "object"
+          },
+          "lower": {
+            "type": "object"
+          },
+          "upper": {
+            "type": "object"
+          },
+          "quantile": {
+            "type": "object"
+          },
+          "contributors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultForecastTemperature_result_contributors"
+            }
           }
         }
       }
