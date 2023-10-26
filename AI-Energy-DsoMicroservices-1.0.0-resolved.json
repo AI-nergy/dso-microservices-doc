@@ -435,7 +435,7 @@
             }
           },
           "result": {
-            "$ref": "#/components/schemas/ResultForecastTemperature_result"
+            "$ref": "#/components/schemas/ResultAnalysisPhaseImbalance_result"
           }
         }
       },
@@ -674,6 +674,17 @@
             "items": {
               "$ref": "#/components/schemas/ResultForecastTemperature_result_contributors"
             }
+          }
+        }
+      },
+      "ResultAnalysisPhaseImbalance_result": {
+        "type": "object",
+        "properties": {
+          "currentUnbalanceFactor": {
+            "type": "object"
+          },
+          "voltageUnbalacefactor": {
+            "type": "object"
           }
         }
       },
