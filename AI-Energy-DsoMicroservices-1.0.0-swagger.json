@@ -220,7 +220,7 @@
       "get" : {
         "tags" : [ "Results" ],
         "summary" : "Get temperature forecast for a given substation",
-        "operationId" : "addInventory2",
+        "operationId" : "forecastTemperature",
         "description" : "Gets temperature forecast....",
         "parameters" : [ {
           "in" : "query",
@@ -338,6 +338,7 @@
     "schemas" : {
       "ErrorResponse" : {
         "type" : "object",
+        "description" : "The error response used by all endpoints",
         "required" : [ "code", "data" ],
         "properties" : {
           "code" : {
@@ -361,6 +362,7 @@
           },
           "data" : {
             "type" : "object",
+            "required" : [ "substationId" ],
             "properties" : {
               "substationId" : {
                 "type" : "string"
@@ -432,10 +434,10 @@
             "type" : "object",
             "properties" : {
               "currentUnbalanceFactor" : {
-                "type" : "object"
+                "$ref" : "#/components/schemas/TimeSeries"
               },
               "voltageUnbalacefactor" : {
-                "type" : "object"
+                "$ref" : "#/components/schemas/TimeSeries"
               }
             }
           }
@@ -517,6 +519,7 @@
       },
       "Location" : {
         "type" : "object",
+        "required" : [ "latitude", "longitude" ],
         "properties" : {
           "latitude" : {
             "type" : "number"
@@ -561,12 +564,6 @@
           "timestamp" : 1698283201,
           "value" : 123.24
         } ]
-      },
-      "ErrorCode" : {
-        "type" : "string",
-        "description" : "INVALID_INPUT_DATA - Some of the input data was invalid, see message for details\n\nAPPLICATION_ERROR - There was an error in the application, shuold be reported\n",
-        "enum" : [ "INVALID_INPUT_DATA", "APPLICATION_ERROR" ],
-        "example" : "INVALID_INPUT_DATA"
       },
       "ResultWarningForecastTemperature" : {
         "type" : "object",
@@ -613,6 +610,12 @@
             "type" : "object"
           }
         }
+      },
+      "ErrorCode" : {
+        "type" : "string",
+        "description" : "- INVALID_INPUT_DATA - Some of the input data was invalid, see message for details\n\n- APPLICATION_ERROR - There was an error in the application, shuold be reported\n",
+        "enum" : [ "INVALID_INPUT_DATA", "APPLICATION_ERROR" ],
+        "example" : "INVALID_INPUT_DATA"
       },
       "WarningCodeForecastTemperature" : {
         "type" : "string",
