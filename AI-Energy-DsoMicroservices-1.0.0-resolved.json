@@ -24,15 +24,15 @@
   ],
   "tags": [
     {
-      "name": "metadata",
+      "name": "MetaData",
       "description": "Endpoints for managing metadata"
     },
     {
-      "name": "datadelivery",
+      "name": "Data Delivery",
       "description": "Endpoints for delivering data"
     },
     {
-      "name": "results",
+      "name": "Results",
       "description": "Endpoints for getting the results"
     }
   ],
@@ -40,7 +40,7 @@
     "/substation/activate": {
       "post": {
         "tags": [
-          "metadata"
+          "MetaData"
         ],
         "summary": "activates a substation",
         "description": "Activates the substation and starts the billing\n",
@@ -49,8 +49,8 @@
           {
             "name": "substationId",
             "in": "query",
-            "description": "pass an optional search string for looking up inventory",
-            "required": false,
+            "description": "The id of the substation",
+            "required": true,
             "style": "form",
             "explode": true,
             "schema": {
@@ -60,12 +60,11 @@
         ],
         "responses": {
           "200": {
-            "description": "substation was succesfully activated",
+            "description": "Substation successfully activated",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string",
-                  "example": "Substation activated"
+                  "$ref": "#/components/schemas/SaveSuccessResponse"
                 }
               }
             }
@@ -86,7 +85,7 @@
     "/substation/deactivate": {
       "post": {
         "tags": [
-          "metadata"
+          "MetaData"
         ],
         "summary": "deactivates a substation",
         "description": "Deactivates the substation and ends the billing\n",
@@ -95,8 +94,8 @@
           {
             "name": "substationId",
             "in": "query",
-            "description": "pass an optional search string for looking up inventory",
-            "required": false,
+            "description": "The id of the substation",
+            "required": true,
             "style": "form",
             "explode": true,
             "schema": {
@@ -106,14 +105,11 @@
         ],
         "responses": {
           "200": {
-            "description": "search results matching criteria",
+            "description": "Substation successfully deactivated",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ResultForecastTemperature"
-                  }
+                  "$ref": "#/components/schemas/SaveSuccessResponse"
                 }
               }
             }
@@ -134,17 +130,17 @@
     "/substation/update": {
       "post": {
         "tags": [
-          "metadata"
+          "MetaData"
         ],
         "summary": "updates metadata for a station",
-        "description": "Updates metadata for a station, should be called only when metadata changes. Can be changed only for an activated substation\n",
+        "description": "Updates metadata for a station, should be called only when metadata changes. Data can be changed only for an activated substation\n",
         "operationId": "substationUpdate",
         "parameters": [
           {
             "name": "substationId",
             "in": "query",
-            "description": "Id of the substation for which to update the data",
-            "required": false,
+            "description": "The id of the substation",
+            "required": true,
             "style": "form",
             "explode": true,
             "schema": {
@@ -164,14 +160,11 @@
         },
         "responses": {
           "200": {
-            "description": "search results matching criteria",
+            "description": "Metadata updated successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SubstationMetadata"
-                  }
+                  "$ref": "#/components/schemas/SaveSuccessResponse"
                 }
               }
             }
@@ -192,30 +185,20 @@
     "/substation/data": {
       "post": {
         "tags": [
-          "datadelivery"
+          "Data Delivery"
         ],
         "summary": "Deliver data for a substation",
-        "description": "Deliver data for a substation\n",
+        "description": "Deliver data for a substation, accepts data for more than one substation at once.\n",
         "operationId": "substationData",
-        "parameters": [
-          {
-            "name": "substationId",
-            "in": "query",
-            "description": "the id of the substation for which the data is being delivered",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "description": "Substation data to deliver",
           "content": {
             "application/json": {
               "schema": {
-                "type": "object"
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/substation_data_body"
+                }
               }
             }
           }
@@ -226,7 +209,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
+                  "$ref": "#/components/schemas/SaveSuccessResponse"
                 }
               }
             }
@@ -247,17 +230,17 @@
     "/forecast/temperature": {
       "get": {
         "tags": [
-          "results"
+          "Results"
         ],
-        "summary": "adds an inventory item",
-        "description": "Adds an item to the system",
+        "summary": "Get temperature forecast for a given substation",
+        "description": "Gets temperature forecast....",
         "operationId": "addInventory2",
         "parameters": [
           {
             "name": "substationId",
             "in": "query",
             "description": "the id of the substation for which to get the data",
-            "required": false,
+            "required": true,
             "style": "form",
             "explode": true,
             "schema": {
@@ -266,8 +249,8 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "Gives the temperature forecats for given subsatationId",
+          "200": {
+            "description": "Gives the temperature forecats for given substationId",
             "content": {
               "application/json": {
                 "schema": {
@@ -292,16 +275,16 @@
     "/analysis/phaseimbalance": {
       "get": {
         "tags": [
-          "results"
+          "Results"
         ],
-        "summary": "adds an inventory item",
-        "description": "Adds an item to the system",
-        "operationId": "addInventory",
+        "summary": "Calculates phase imbalance",
+        "description": "Calculates phase imbalance",
+        "operationId": "analysisPhaseImbalance",
         "parameters": [
           {
             "name": "substationId",
             "in": "query",
-            "description": "the id of the substation for which to get the data",
+            "description": "the id of the substation for which to get the results",
             "required": false,
             "style": "form",
             "explode": true,
@@ -311,8 +294,15 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "item created"
+          "200": {
+            "description": "Gives the phase imbalnace analysis for given substationId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultAnalysisPhaseimbalance"
+                }
+              }
+            }
           },
           "400": {
             "description": "Invalid input data or error in the API",
@@ -330,11 +320,11 @@
     "/analysis/voltagedeviation": {
       "get": {
         "tags": [
-          "results"
+          "Results"
         ],
         "summary": "calculate the voltage deviation",
         "description": "Calculates the voltage deviation from the delivered data for the specified subsation",
-        "operationId": "analysisVoltagedeviation",
+        "operationId": "analysisVoltageDeviation",
         "parameters": [
           {
             "name": "substationId",
@@ -350,7 +340,14 @@
         ],
         "responses": {
           "200": {
-            "description": "item created"
+            "description": "Gives the voltage deviation analysis for given substationId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultAnalysisVoltageDeviation"
+                }
+              }
+            }
           },
           "400": {
             "description": "Invalid input data or error in the API",
@@ -368,22 +365,6 @@
   },
   "components": {
     "schemas": {
-      "SuccessResponse": {
-        "required": [
-          "data",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "example": "Data was succesfully saved"
-          },
-          "data": {
-            "$ref": "#/components/schemas/SuccessResponse_data"
-          }
-        }
-      },
       "ErrorResponse": {
         "required": [
           "code",
@@ -402,23 +383,79 @@
           }
         }
       },
-      "ResultWarning": {
+      "SaveSuccessResponse": {
         "required": [
-          "code",
           "data",
           "message"
         ],
         "type": "object",
         "properties": {
-          "code": {
-            "$ref": "#/components/schemas/WarningCode"
-          },
           "message": {
             "type": "string",
-            "example": "We have enough input data to do the calculation but no enough for high accuracy"
+            "example": "Data was succesfully saved"
           },
           "data": {
-            "type": "object"
+            "$ref": "#/components/schemas/SaveSuccessResponse_data"
+          }
+        }
+      },
+      "ResultForecastTemperature": {
+        "required": [
+          "result"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultWarningForecastTemperature"
+            }
+          },
+          "result": {
+            "$ref": "#/components/schemas/ResultForecastTemperature_result"
+          }
+        }
+      },
+      "ResultAnalysisPhaseimbalance": {
+        "required": [
+          "result"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultWarningAnalysisPhaseImbalance"
+            }
+          },
+          "result": {
+            "$ref": "#/components/schemas/ResultForecastTemperature_result"
+          }
+        }
+      },
+      "ResultAnalysisVoltageDeviation": {
+        "required": [
+          "result"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultWarningAnalysisVoltageDeviation"
+            }
+          },
+          "result": {
+            "$ref": "#/components/schemas/ResultAnalysisVoltageDeviation_result"
           }
         }
       },
@@ -457,40 +494,123 @@
           }
         }
       },
-      "ResultForecastTemperature": {
-        "required": [
-          "result"
-        ],
+      "TimeSeries": {
         "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
+        "additionalProperties": {
+          "type": "number"
+        },
+        "description": "A series of timestamp, value pairs",
+        "example": {
+          "1698283186": 7.4,
+          "1698283201": 123.24
+        }
+      },
+      "TimeSeries2": {
+        "type": "array",
+        "description": "A series of timestamp, value pairs",
+        "example": [
+          {
+            "timestamp": 1698283186,
+            "value": 7.4
           },
-          "warnings": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ResultWarning"
-            }
-          },
-          "result": {
-            "$ref": "#/components/schemas/ResultForecastTemperature_result"
+          {
+            "timestamp": 1698283201,
+            "value": 123.24
           }
+        ],
+        "items": {
+          "$ref": "#/components/schemas/TimeSeries2_inner"
         }
       },
       "ErrorCode": {
         "type": "string",
-        "description": "INVALID_INPUT_DATA - Some of the input data was invalid, see message for details\nAPPLICATION_ERROR - There was an error in the application\n",
+        "description": "INVALID_INPUT_DATA - Some of the input data was invalid, see message for details\n\nAPPLICATION_ERROR - There was an error in the application, shuold be reported\n",
         "example": "INVALID_INPUT_DATA",
         "enum": [
           "INVALID_INPUT_DATA",
           "APPLICATION_ERROR"
         ]
       },
-      "WarningCode": {
+      "ResultWarningForecastTemperature": {
+        "required": [
+          "code",
+          "data",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/WarningCodeForecastTemperature"
+          },
+          "message": {
+            "type": "string",
+            "example": "We have enough input data to do the calculation but no enough for high accuracy"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "ResultWarningAnalysisPhaseImbalance": {
+        "required": [
+          "code",
+          "data",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/WarningCodeAnalysisPhaseimbalance"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "ResultWarningAnalysisVoltageDeviation": {
+        "required": [
+          "code",
+          "data",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/WarningCodeAnalysisVoltageDeviation"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "WarningCodeForecastTemperature": {
         "type": "string",
         "example": "WARNING_ACCURACCY_LOW_INPUT",
         "enum": [
-          "WARNING_ACCURACCY_LOW_INPUT"
+          "WARNING_ACCURACCY_LOW_INPUT",
+          "WARNING_ACCURACCY_LOW_WEATHER",
+          "WARNING_BAD_MODEL_FIT"
+        ]
+      },
+      "WarningCodeAnalysisPhaseimbalance": {
+        "type": "string",
+        "example": "WARNING_VOLTAGE_UNBALANCE_EN50160_2010",
+        "enum": [
+          "WARNING_VOLTAGE_UNBALANCE_EN50160_2010",
+          "WARNING_CURRENT_UNBALANCE"
+        ]
+      },
+      "WarningCodeAnalysisVoltageDeviation": {
+        "type": "string",
+        "example": "WARNING_VOLTAGE_DEVIATION",
+        "enum": [
+          "WARNING_VOLTAGE_DEVIATION"
         ]
       },
       "substation_update_body": {
@@ -504,11 +624,64 @@
           }
         }
       },
-      "SuccessResponse_data": {
+      "substation_data_body": {
         "type": "object",
         "properties": {
           "substationId": {
             "type": "string"
+          },
+          "transformer": {
+            "type": "object"
+          }
+        }
+      },
+      "SaveSuccessResponse_data": {
+        "type": "object",
+        "properties": {
+          "substationId": {
+            "type": "string"
+          }
+        }
+      },
+      "ResultForecastTemperature_result_contributors": {
+        "type": "object",
+        "properties": {
+          "contributor": {
+            "type": "string"
+          },
+          "percentage": {
+            "type": "number"
+          }
+        }
+      },
+      "ResultForecastTemperature_result": {
+        "type": "object",
+        "properties": {
+          "expected": {
+            "type": "object"
+          },
+          "lower": {
+            "type": "object"
+          },
+          "upper": {
+            "type": "object"
+          },
+          "quantile": {
+            "type": "object"
+          },
+          "contributors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultForecastTemperature_result_contributors"
+            }
+          }
+        }
+      },
+      "ResultAnalysisVoltageDeviation_result": {
+        "type": "object",
+        "properties": {
+          "voltageDeviation": {
+            "$ref": "#/components/schemas/TimeSeries"
           }
         }
       },
@@ -550,42 +723,19 @@
           "model": {
             "type": "object"
           },
-          "namepolate": {
+          "nameplate": {
             "type": "object"
           }
         }
       },
-      "ResultForecastTemperature_result_contributors": {
+      "TimeSeries2_inner": {
         "type": "object",
         "properties": {
-          "contributor": {
-            "type": "string"
+          "timestamp": {
+            "type": "integer"
           },
-          "percentage": {
+          "value": {
             "type": "number"
-          }
-        }
-      },
-      "ResultForecastTemperature_result": {
-        "type": "object",
-        "properties": {
-          "expected": {
-            "type": "object"
-          },
-          "lower": {
-            "type": "object"
-          },
-          "upper": {
-            "type": "object"
-          },
-          "quantile": {
-            "type": "object"
-          },
-          "contributors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ResultForecastTemperature_result_contributors"
-            }
           }
         }
       }
