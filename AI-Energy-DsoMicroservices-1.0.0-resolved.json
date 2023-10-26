@@ -299,7 +299,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultAnalysisPhaseimbalance"
+                  "$ref": "#/components/schemas/ResultAnalysisPhaseImbalance"
                 }
               }
             }
@@ -419,7 +419,7 @@
           }
         }
       },
-      "ResultAnalysisPhaseimbalance": {
+      "ResultAnalysisPhaseImbalance": {
         "required": [
           "result"
         ],
@@ -560,7 +560,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "$ref": "#/components/schemas/WarningCodeAnalysisPhaseimbalance"
+            "$ref": "#/components/schemas/WarningCodeAnalysisPhaseImbalance"
           },
           "message": {
             "type": "string"
@@ -598,7 +598,7 @@
           "WARNING_BAD_MODEL_FIT"
         ]
       },
-      "WarningCodeAnalysisPhaseimbalance": {
+      "WarningCodeAnalysisPhaseImbalance": {
         "type": "string",
         "example": "WARNING_VOLTAGE_UNBALANCE_EN50160_2010",
         "enum": [
