@@ -1,0 +1,634 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://virtserver.swaggerhub.com/AI-Energy/DsoMicroservices/1.0.0"
+  }, {
+    "description" : "Production server",
+    "url" : "https://virtserver.swaggerhub.com/AI-Energy/DSO-Microservices/1.0.0"
+  } ],
+  "info" : {
+    "description" : "Microservices for gathering and analysing the data from DSOs",
+    "version" : "1.0.0",
+    "title" : "DSO Microservices API",
+    "contact" : {
+      "email" : "info@ai-nergy.net"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags" : [ {
+    "name" : "MetaData",
+    "description" : "Endpoints for managing metadata"
+  }, {
+    "name" : "Data Delivery",
+    "description" : "Endpoints for delivering data"
+  }, {
+    "name" : "Results",
+    "description" : "Endpoints for getting the results"
+  } ],
+  "paths" : {
+    "/substation/activate" : {
+      "post" : {
+        "tags" : [ "MetaData" ],
+        "summary" : "activates a substation",
+        "operationId" : "substationActivate",
+        "description" : "Activates the substation and starts the billing\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "substationId",
+          "description" : "The id of the substation",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Substation successfully activated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SaveSuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input data or error in the API",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/substation/deactivate" : {
+      "post" : {
+        "tags" : [ "MetaData" ],
+        "summary" : "deactivates a substation",
+        "operationId" : "substationDeactivate",
+        "description" : "Deactivates the substation and ends the billing\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "substationId",
+          "description" : "The id of the substation",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Substation successfully deactivated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SaveSuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input data or error in the API",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/substation/update" : {
+      "post" : {
+        "tags" : [ "MetaData" ],
+        "summary" : "updates metadata for a station",
+        "operationId" : "substationUpdate",
+        "description" : "Updates metadata for a station, should be called only when metadata changes. Data can be changed only for an activated substation\n",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "substationId",
+          "description" : "The id of the substation",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "New substation metadata",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "substation" : {
+                    "$ref" : "#/components/schemas/SubstationMetadata"
+                  },
+                  "transformer" : {
+                    "$ref" : "#/components/schemas/TransformerMetadata"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Metadata updated successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SaveSuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input data or error in the API",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/substation/data" : {
+      "post" : {
+        "tags" : [ "Data Delivery" ],
+        "summary" : "Deliver data for a substation",
+        "operationId" : "substationData",
+        "description" : "Deliver data for a substation, accepts data for more than one substation at once.\n",
+        "requestBody" : {
+          "description" : "Substation data to deliver",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "substationId" : {
+                      "type" : "string"
+                    },
+                    "transformer" : {
+                      "type" : "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Data saved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SaveSuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input data or error in the API",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forecast/temperature" : {
+      "get" : {
+        "tags" : [ "Results" ],
+        "summary" : "Get temperature forecast for a given substation",
+        "operationId" : "addInventory2",
+        "description" : "Gets temperature forecast....",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "substationId",
+          "description" : "the id of the substation for which to get the data",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Gives the temperature forecats for given substationId",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResultForecastTemperature"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input data or error in the API",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analysis/phaseimbalance" : {
+      "get" : {
+        "tags" : [ "Results" ],
+        "summary" : "Calculates phase imbalance",
+        "operationId" : "analysisPhaseImbalance",
+        "description" : "Calculates phase imbalance",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "substationId",
+          "description" : "the id of the substation for which to get the results",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Gives the phase imbalnace analysis for given substationId",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResultAnalysisPhaseImbalance"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input data or error in the API",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analysis/voltagedeviation" : {
+      "get" : {
+        "tags" : [ "Results" ],
+        "summary" : "calculate the voltage deviation",
+        "operationId" : "analysisVoltageDeviation",
+        "description" : "Calculates the voltage deviation from the delivered data for the specified subsation",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "substationId",
+          "description" : "the id of the substation for which to get the data",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Gives the voltage deviation analysis for given substationId",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResultAnalysisVoltageDeviation"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input data or error in the API",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "ErrorResponse" : {
+        "type" : "object",
+        "required" : [ "code", "data" ],
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/ErrorCode"
+          },
+          "data" : {
+            "type" : "object",
+            "example" : {
+              "substationId" : "missing field"
+            }
+          }
+        }
+      },
+      "SaveSuccessResponse" : {
+        "type" : "object",
+        "required" : [ "message", "data" ],
+        "properties" : {
+          "message" : {
+            "type" : "string",
+            "example" : "Data was succesfully saved"
+          },
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "substationId" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      },
+      "ResultForecastTemperature" : {
+        "type" : "object",
+        "required" : [ "result" ],
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "warnings" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ResultWarningForecastTemperature"
+            }
+          },
+          "result" : {
+            "type" : "object",
+            "properties" : {
+              "expected" : {
+                "type" : "object"
+              },
+              "lower" : {
+                "type" : "object"
+              },
+              "upper" : {
+                "type" : "object"
+              },
+              "quantile" : {
+                "type" : "object"
+              },
+              "contributors" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "contributor" : {
+                      "type" : "string"
+                    },
+                    "percentage" : {
+                      "type" : "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ResultAnalysisPhaseImbalance" : {
+        "type" : "object",
+        "required" : [ "result" ],
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "warnings" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ResultWarningAnalysisPhaseImbalance"
+            }
+          },
+          "result" : {
+            "type" : "object",
+            "properties" : {
+              "currentUnbalanceFactor" : {
+                "type" : "object"
+              },
+              "voltageUnbalacefactor" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      },
+      "ResultAnalysisVoltageDeviation" : {
+        "type" : "object",
+        "required" : [ "result" ],
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "warnings" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ResultWarningAnalysisVoltageDeviation"
+            }
+          },
+          "result" : {
+            "type" : "object",
+            "properties" : {
+              "voltageDeviation" : {
+                "$ref" : "#/components/schemas/TimeSeries"
+              }
+            }
+          }
+        }
+      },
+      "SubstationMetadata" : {
+        "type" : "object",
+        "required" : [ "id", "substation", "transformer" ],
+        "properties" : {
+          "substation" : {
+            "type" : "object",
+            "properties" : {
+              "id" : {
+                "type" : "string",
+                "example" : "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+              },
+              "metadata" : {
+                "type" : "object",
+                "properties" : {
+                  "label" : {
+                    "type" : "string"
+                  },
+                  "model" : {
+                    "type" : "object"
+                  },
+                  "location" : {
+                    "$ref" : "#/components/schemas/Location"
+                  },
+                  "transformer" : {
+                    "type" : "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "TransformerMetadata" : {
+        "type" : "object",
+        "properties" : {
+          "metadata" : {
+            "type" : "object",
+            "properties" : {
+              "label" : {
+                "type" : "string"
+              },
+              "model" : {
+                "type" : "object"
+              },
+              "nameplate" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      },
+      "Location" : {
+        "type" : "object",
+        "properties" : {
+          "latitude" : {
+            "type" : "number"
+          },
+          "longitude" : {
+            "type" : "number"
+          },
+          "elevation" : {
+            "type" : "number"
+          }
+        }
+      },
+      "TimeSeries" : {
+        "description" : "A series of timestamp, value pairs",
+        "type" : "object",
+        "additionalProperties" : {
+          "type" : "number"
+        },
+        "example" : {
+          "1698283186" : 7.4,
+          "1698283201" : 123.24
+        }
+      },
+      "TimeSeries2" : {
+        "description" : "A series of timestamp, value pairs",
+        "type" : "array",
+        "items" : {
+          "type" : "object",
+          "properties" : {
+            "timestamp" : {
+              "type" : "integer"
+            },
+            "value" : {
+              "type" : "number"
+            }
+          }
+        },
+        "example" : [ {
+          "timestamp" : 1698283186,
+          "value" : 7.4
+        }, {
+          "timestamp" : 1698283201,
+          "value" : 123.24
+        } ]
+      },
+      "ErrorCode" : {
+        "type" : "string",
+        "description" : "INVALID_INPUT_DATA - Some of the input data was invalid, see message for details\n\nAPPLICATION_ERROR - There was an error in the application, shuold be reported\n",
+        "enum" : [ "INVALID_INPUT_DATA", "APPLICATION_ERROR" ],
+        "example" : "INVALID_INPUT_DATA"
+      },
+      "ResultWarningForecastTemperature" : {
+        "type" : "object",
+        "required" : [ "code", "message", "data" ],
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/WarningCodeForecastTemperature"
+          },
+          "message" : {
+            "type" : "string",
+            "example" : "We have enough input data to do the calculation but no enough for high accuracy"
+          },
+          "data" : {
+            "type" : "object"
+          }
+        }
+      },
+      "ResultWarningAnalysisPhaseImbalance" : {
+        "type" : "object",
+        "required" : [ "code", "message", "data" ],
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/WarningCodeAnalysisPhaseImbalance"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "data" : {
+            "type" : "object"
+          }
+        }
+      },
+      "ResultWarningAnalysisVoltageDeviation" : {
+        "type" : "object",
+        "required" : [ "code", "message", "data" ],
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/WarningCodeAnalysisVoltageDeviation"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "data" : {
+            "type" : "object"
+          }
+        }
+      },
+      "WarningCodeForecastTemperature" : {
+        "type" : "string",
+        "enum" : [ "WARNING_ACCURACCY_LOW_INPUT", "WARNING_ACCURACCY_LOW_WEATHER", "WARNING_BAD_MODEL_FIT" ],
+        "example" : "WARNING_ACCURACCY_LOW_INPUT"
+      },
+      "WarningCodeAnalysisPhaseImbalance" : {
+        "type" : "string",
+        "enum" : [ "WARNING_VOLTAGE_UNBALANCE_EN50160_2010", "WARNING_CURRENT_UNBALANCE" ],
+        "example" : "WARNING_VOLTAGE_UNBALANCE_EN50160_2010"
+      },
+      "WarningCodeAnalysisVoltageDeviation" : {
+        "type" : "string",
+        "enum" : [ "WARNING_VOLTAGE_DEVIATION" ],
+        "example" : "WARNING_VOLTAGE_DEVIATION"
+      }
+    }
+  }
+}
