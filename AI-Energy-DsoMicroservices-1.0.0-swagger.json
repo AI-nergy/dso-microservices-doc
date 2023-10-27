@@ -383,9 +383,6 @@
         "type" : "object",
         "required" : [ "result" ],
         "properties" : {
-          "id" : {
-            "type" : "string"
-          },
           "warnings" : {
             "type" : "array",
             "items" : {
@@ -393,30 +390,41 @@
             }
           },
           "result" : {
-            "type" : "object",
-            "properties" : {
-              "expected" : {
-                "type" : "object"
-              },
-              "lower" : {
-                "type" : "object"
-              },
-              "upper" : {
-                "type" : "object"
-              },
-              "quantile" : {
-                "type" : "object"
-              },
-              "contributors" : {
-                "type" : "array",
-                "items" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "timestamp" : {
+                  "type" : "integer"
+                },
+                "data" : {
                   "type" : "object",
                   "properties" : {
-                    "contributor" : {
-                      "type" : "string"
-                    },
-                    "percentage" : {
+                    "expected" : {
                       "type" : "number"
+                    },
+                    "lower" : {
+                      "type" : "number"
+                    },
+                    "upper" : {
+                      "type" : "number"
+                    },
+                    "quantile" : {
+                      "type" : "number"
+                    },
+                    "contributors" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "contributor" : {
+                            "type" : "string"
+                          },
+                          "percentage" : {
+                            "type" : "number"
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -429,9 +437,6 @@
         "type" : "object",
         "required" : [ "result" ],
         "properties" : {
-          "id" : {
-            "type" : "string"
-          },
           "warnings" : {
             "type" : "array",
             "items" : {
@@ -439,13 +444,24 @@
             }
           },
           "result" : {
-            "type" : "object",
-            "properties" : {
-              "currentUnbalanceFactor" : {
-                "$ref" : "#/components/schemas/TimeSeries"
-              },
-              "voltageUnbalacefactor" : {
-                "$ref" : "#/components/schemas/TimeSeries"
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "timestamp" : {
+                  "type" : "integer"
+                },
+                "data" : {
+                  "type" : "object",
+                  "properties" : {
+                    "current_unbalance_factor" : {
+                      "type" : "number"
+                    },
+                    "voltage_unbalace_factor" : {
+                      "type" : "number"
+                    }
+                  }
+                }
               }
             }
           }
@@ -455,9 +471,6 @@
         "type" : "object",
         "required" : [ "result" ],
         "properties" : {
-          "id" : {
-            "type" : "string"
-          },
           "warnings" : {
             "type" : "array",
             "items" : {
@@ -465,10 +478,21 @@
             }
           },
           "result" : {
-            "type" : "object",
-            "properties" : {
-              "voltageDeviation" : {
-                "$ref" : "#/components/schemas/TimeSeries"
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "timestamp" : {
+                  "type" : "integer"
+                },
+                "data" : {
+                  "type" : "object",
+                  "properties" : {
+                    "voltage_deviation" : {
+                      "type" : "number"
+                    }
+                  }
+                }
               }
             }
           }
@@ -715,17 +739,6 @@
           "elevation" : {
             "type" : "number"
           }
-        }
-      },
-      "TimeSeries" : {
-        "description" : "A series of timestamp, value pairs",
-        "type" : "object",
-        "additionalProperties" : {
-          "type" : "number"
-        },
-        "example" : {
-          "1698283186" : 7.4,
-          "1698283201" : 123.24
         }
       },
       "ResultWarningForecastTemperature" : {
