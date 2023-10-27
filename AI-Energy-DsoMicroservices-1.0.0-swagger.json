@@ -180,11 +180,19 @@
                 "items" : {
                   "type" : "object",
                   "properties" : {
-                    "substationId" : {
-                      "type" : "string"
+                    "substation" : {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "string"
+                        }
+                      }
                     },
                     "transformer" : {
-                      "type" : "object"
+                      "$ref" : "#/components/schemas/TransformerData"
+                    },
+                    "timestamp" : {
+                      "type" : "integer"
                     }
                   }
                 }
@@ -517,6 +525,183 @@
           }
         }
       },
+      "TransformerData" : {
+        "type" : "object",
+        "properties" : {
+          "electrical" : {
+            "type" : "object",
+            "properties" : {
+              "secondary" : {
+                "type" : "object",
+                "properties" : {
+                  "line_1" : {
+                    "$ref" : "#/components/schemas/ElectricalLinePhaseData"
+                  },
+                  "line_2" : {
+                    "$ref" : "#/components/schemas/ElectricalLinePhaseData"
+                  },
+                  "line_3" : {
+                    "$ref" : "#/components/schemas/ElectricalLinePhaseData"
+                  },
+                  "neutral" : {
+                    "$ref" : "#/components/schemas/ElectricalLineNeutralData"
+                  },
+                  "frequency" : {
+                    "type" : "object",
+                    "properties" : {
+                      "instantaneous" : {
+                        "type" : "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "thermal" : {
+            "type" : "object",
+            "properties" : {
+              "top_oil" : {
+                "type" : "object",
+                "properties" : {
+                  "temperature" : {
+                    "type" : "number"
+                  }
+                }
+              },
+              "radiator" : {
+                "type" : "object",
+                "properties" : {
+                  "temperature" : {
+                    "type" : "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ElectricalLinePhaseData" : {
+        "type" : "object",
+        "required" : [ "current", "voltage", "power", "energy" ],
+        "properties" : {
+          "current" : {
+            "$ref" : "#/components/schemas/ElectricalWave"
+          },
+          "voltage" : {
+            "$ref" : "#/components/schemas/ElectricalWave"
+          },
+          "power" : {
+            "type" : "object",
+            "properties" : {
+              "active" : {
+                "type" : "number"
+              },
+              "reactive" : {
+                "type" : "number"
+              },
+              "apparent" : {
+                "type" : "number"
+              },
+              "power_factor" : {
+                "type" : "object",
+                "properties" : {
+                  "total" : {
+                    "type" : "number"
+                  }
+                }
+              }
+            }
+          },
+          "energy" : {
+            "type" : "object",
+            "properties" : {
+              "active" : {
+                "type" : "object",
+                "properties" : {
+                  "imported" : {
+                    "type" : "number"
+                  },
+                  "exported" : {
+                    "type" : "number"
+                  }
+                }
+              },
+              "reactive" : {
+                "type" : "object",
+                "properties" : {
+                  "imported" : {
+                    "type" : "number"
+                  },
+                  "exported" : {
+                    "type" : "number"
+                  }
+                }
+              },
+              "apparent" : {
+                "type" : "object",
+                "properties" : {
+                  "imported" : {
+                    "type" : "number"
+                  },
+                  "exported" : {
+                    "type" : "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ElectricalLineNeutralData" : {
+        "type" : "object",
+        "required" : [ "current" ],
+        "properties" : {
+          "current" : {
+            "$ref" : "#/components/schemas/ElectricalWave"
+          }
+        }
+      },
+      "ElectricalWave" : {
+        "type" : "object",
+        "required" : [ "rms" ],
+        "properties" : {
+          "rms" : {
+            "type" : "number"
+          },
+          "waveform_peak" : {
+            "type" : "number"
+          },
+          "crest_factor" : {
+            "type" : "number"
+          },
+          "thd" : {
+            "type" : "object",
+            "properties" : {
+              "rms" : {
+                "type" : "number"
+              },
+              "fundamental" : {
+                "type" : "number"
+              }
+            }
+          },
+          "spectrum" : {
+            "type" : "object",
+            "properties" : {
+              "centroid" : {
+                "type" : "number"
+              },
+              "range" : {
+                "type" : "number"
+              },
+              "magnitude" : {
+                "type" : "number"
+              }
+            }
+          }
+        }
+      },
       "Location" : {
         "type" : "object",
         "required" : [ "latitude", "longitude" ],
@@ -542,28 +727,6 @@
           "1698283186" : 7.4,
           "1698283201" : 123.24
         }
-      },
-      "TimeSeries2" : {
-        "description" : "A series of timestamp, value pairs",
-        "type" : "array",
-        "items" : {
-          "type" : "object",
-          "properties" : {
-            "timestamp" : {
-              "type" : "integer"
-            },
-            "value" : {
-              "type" : "number"
-            }
-          }
-        },
-        "example" : [ {
-          "timestamp" : 1698283186,
-          "value" : 7.4
-        }, {
-          "timestamp" : 1698283201,
-          "value" : 123.24
-        } ]
       },
       "ResultWarningForecastTemperature" : {
         "type" : "object",
