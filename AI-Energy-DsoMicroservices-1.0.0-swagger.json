@@ -238,6 +238,18 @@
           "schema" : {
             "type" : "string"
           }
+        }, {
+          "in" : "query",
+          "name" : "quantiles",
+          "description" : "Array of quantiles for which to return the values, items can be any number in range 0-1. Optional, default: [0.05, 0.5, 0.95]",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "example" : [ 0.05, 0.5, 0.95 ]
+          }
         } ],
         "responses" : {
           "200" : {
@@ -410,7 +422,15 @@
                       "type" : "number"
                     },
                     "quantile" : {
-                      "type" : "number"
+                      "type" : "object",
+                      "additionalProperties" : {
+                        "type" : "number"
+                      },
+                      "example" : {
+                        "0.05" : 23.4422666666667,
+                        "0.5" : 24.3985833333333,
+                        "0.95" : 22.5100666666667
+                      }
                     },
                     "contributors" : {
                       "type" : "array",
@@ -502,29 +522,24 @@
         "type" : "object",
         "required" : [ "id", "substation", "transformer" ],
         "properties" : {
-          "substation" : {
+          "id" : {
+            "type" : "string",
+            "example" : "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "metadata" : {
             "type" : "object",
             "properties" : {
-              "id" : {
-                "type" : "string",
-                "example" : "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+              "label" : {
+                "type" : "string"
               },
-              "metadata" : {
-                "type" : "object",
-                "properties" : {
-                  "label" : {
-                    "type" : "string"
-                  },
-                  "model" : {
-                    "type" : "object"
-                  },
-                  "location" : {
-                    "$ref" : "#/components/schemas/Location"
-                  },
-                  "transformer" : {
-                    "type" : "object"
-                  }
-                }
+              "model" : {
+                "type" : "object"
+              },
+              "location" : {
+                "$ref" : "#/components/schemas/Location"
+              },
+              "transformer" : {
+                "type" : "object"
               }
             }
           }
