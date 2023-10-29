@@ -2,10 +2,10 @@
   "openapi" : "3.0.0",
   "servers" : [ {
     "description" : "dso-microservices PROD",
-    "url" : "https://dso-microservices.azurewebsites.net/api/"
+    "url" : "https://dso-microservices.azurewebsites.net/api"
   }, {
     "description" : "localhost DEV",
-    "url" : "http://localhost:7071/api/"
+    "url" : "http://localhost:7071/api"
   } ],
   "info" : {
     "description" : "Microservices for gathering and analysing the data from DSOs",
@@ -264,7 +264,7 @@
             "items" : {
               "type" : "string"
             },
-            "example" : [ 0.05, 0.5, 0.95 ]
+            "example" : [ "0.05", "0.5", "0.95" ]
           }
         } ],
         "responses" : {
@@ -832,7 +832,7 @@
         "type" : "string",
         "description" : "- ERROR_CODE_INVALID_INPUT_DATA - Some of the input data was invalid, see data for details\n\n- ERROR_CODE_APPLICATION_ERROR - There was an error in the application, shuold be reported\n",
         "enum" : [ "ERROR_INVALID_INPUT_DATA", "ERROR_APPLICATION_ERROR" ],
-        "example" : "INVALID_INPUT_DATA"
+        "example" : "ERROR_INVALID_INPUT_DATA"
       },
       "WarningCodeForecastTemperature" : {
         "type" : "string",
