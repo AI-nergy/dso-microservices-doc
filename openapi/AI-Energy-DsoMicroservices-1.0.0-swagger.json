@@ -1,11 +1,11 @@
 {
   "openapi" : "3.0.0",
   "servers" : [ {
-    "description" : "SwaggerHub API Auto Mocking",
-    "url" : "https://virtserver.swaggerhub.com/AI-Energy/DsoMicroservices/1.0.0"
+    "description" : "dso-microservices PROD",
+    "url" : "https://dso-microservices.azurewebsites.net/api/"
   }, {
-    "description" : "Production server",
-    "url" : "https://virtserver.swaggerhub.com/AI-Energy/DSO-Microservices/1.0.0"
+    "description" : "localhost DEV",
+    "url" : "http://localhost:7071/api/"
   } ],
   "info" : {
     "description" : "Microservices for gathering and analysing the data from DSOs",
@@ -29,6 +29,9 @@
     "name" : "Results",
     "description" : "Endpoints for getting the results"
   } ],
+  "security" : [ {
+    "ApiKeyAuth" : [ ]
+  } ],
   "paths" : {
     "/substation/activate" : {
       "post" : {
@@ -36,15 +39,26 @@
         "summary" : "activates a substation",
         "operationId" : "substationActivate",
         "description" : "Activates the substation and starts the billing\n",
-        "parameters" : [ {
-          "in" : "query",
-          "name" : "substationId",
-          "description" : "The id of the substation",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
+        "requestBody" : {
+          "description" : "Substation which to activate",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "substation" : {
+                    "type" : "object",
+                    "properties" : {
+                      "id" : {
+                        "type" : "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
-        } ],
+        },
         "responses" : {
           "200" : {
             "description" : "Substation successfully activated",
@@ -75,15 +89,26 @@
         "summary" : "deactivates a substation",
         "operationId" : "substationDeactivate",
         "description" : "Deactivates the substation and ends the billing\n",
-        "parameters" : [ {
-          "in" : "query",
-          "name" : "substationId",
-          "description" : "The id of the substation",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
+        "requestBody" : {
+          "description" : "Substation which to deactivate",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "substation" : {
+                    "type" : "object",
+                    "properties" : {
+                      "id" : {
+                        "type" : "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
-        } ],
+        },
         "responses" : {
           "200" : {
             "description" : "Substation successfully deactivated",
@@ -114,15 +139,6 @@
         "summary" : "updates metadata for a station",
         "operationId" : "substationUpdate",
         "description" : "Updates metadata for a station, should be called only when metadata changes. Data can be changed only for an activated substation\n",
-        "parameters" : [ {
-          "in" : "query",
-          "name" : "substationId",
-          "description" : "The id of the substation",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
         "requestBody" : {
           "description" : "New substation metadata",
           "content" : {
@@ -241,7 +257,7 @@
         }, {
           "in" : "query",
           "name" : "quantiles",
-          "description" : "Array of quantiles for which to return the values, items can be any number in range 0-1. Optional, default: [0.05, 0.5, 0.95]",
+          "description" : "Array of quantiles for which to return the values, items can be any numbers in range 0-1. Optional, default: [0.05, 0.5, 0.95]",
           "required" : false,
           "schema" : {
             "type" : "array",
@@ -355,6 +371,13 @@
     }
   },
   "components" : {
+    "securitySchemes" : {
+      "ApiKeyAuth" : {
+        "type" : "apiKey",
+        "in" : "header",
+        "name" : "x-functions-key"
+      }
+    },
     "schemas" : {
       "ErrorResponse" : {
         "type" : "object",
@@ -726,16 +749,19 @@
             }
           },
           "spectrum" : {
-            "type" : "object",
-            "properties" : {
-              "centroid" : {
-                "type" : "number"
-              },
-              "range" : {
-                "type" : "number"
-              },
-              "magnitude" : {
-                "type" : "number"
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "centroid" : {
+                  "type" : "number"
+                },
+                "range" : {
+                  "type" : "number"
+                },
+                "magnitude" : {
+                  "type" : "number"
+                }
               }
             }
           }
