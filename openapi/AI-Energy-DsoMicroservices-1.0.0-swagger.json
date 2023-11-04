@@ -51,6 +51,9 @@
                     "properties" : {
                       "id" : {
                         "type" : "string"
+                      },
+                      "location" : {
+                        "$ref" : "#/components/schemas/Location"
                       }
                     }
                   }
@@ -195,9 +198,11 @@
                 "type" : "array",
                 "items" : {
                   "type" : "object",
+                  "required" : [ "substation", "transformer", "timestamp" ],
                   "properties" : {
                     "substation" : {
                       "type" : "object",
+                      "required" : [ "id" ],
                       "properties" : {
                         "id" : {
                           "type" : "string"
@@ -551,6 +556,7 @@
           },
           "metadata" : {
             "type" : "object",
+            "required" : [ "location" ],
             "properties" : {
               "label" : {
                 "type" : "string"
@@ -589,12 +595,15 @@
       },
       "TransformerData" : {
         "type" : "object",
+        "required" : [ "electrical", "thermal" ],
         "properties" : {
           "electrical" : {
             "type" : "object",
+            "required" : [ "secondary" ],
             "properties" : {
               "secondary" : {
                 "type" : "object",
+                "required" : [ "line_1", "line_2", "line_3", "neutral" ],
                 "properties" : {
                   "line_1" : {
                     "$ref" : "#/components/schemas/ElectricalLinePhaseData"
@@ -622,9 +631,11 @@
           },
           "thermal" : {
             "type" : "object",
+            "required" : [ "top_oil" ],
             "properties" : {
               "top_oil" : {
                 "type" : "object",
+                "required" : [ "temperature" ],
                 "properties" : {
                   "temperature" : {
                     "type" : "number"
@@ -784,7 +795,7 @@
       },
       "ResultWarningForecastTemperature" : {
         "type" : "object",
-        "required" : [ "code", "message", "data" ],
+        "required" : [ "code", "message" ],
         "properties" : {
           "code" : {
             "$ref" : "#/components/schemas/WarningCodeForecastTemperature"
@@ -800,7 +811,7 @@
       },
       "ResultWarningAnalysisPhaseImbalance" : {
         "type" : "object",
-        "required" : [ "code", "message", "data" ],
+        "required" : [ "code", "message" ],
         "properties" : {
           "code" : {
             "$ref" : "#/components/schemas/WarningCodeAnalysisPhaseImbalance"
@@ -815,7 +826,7 @@
       },
       "ResultWarningAnalysisVoltageDeviation" : {
         "type" : "object",
-        "required" : [ "code", "message", "data" ],
+        "required" : [ "code", "message" ],
         "properties" : {
           "code" : {
             "$ref" : "#/components/schemas/WarningCodeAnalysisVoltageDeviation"
