@@ -253,7 +253,7 @@
         "description" : "Gets temperature forecast....",
         "parameters" : [ {
           "in" : "query",
-          "name" : "substationId",
+          "name" : "substation_id",
           "description" : "the id of the substation for which to get the data",
           "required" : true,
           "schema" : {
@@ -274,7 +274,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Gives the temperature forecats for given substationId",
+            "description" : "Gives the temperature forecats for given substation_id",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -304,7 +304,7 @@
         "description" : "Calculates phase imbalance",
         "parameters" : [ {
           "in" : "query",
-          "name" : "substationId",
+          "name" : "substation_id",
           "description" : "the id of the substation for which to get the results",
           "required" : false,
           "schema" : {
@@ -313,7 +313,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Gives the phase imbalnace analysis for given substationId",
+            "description" : "Gives the phase imbalnace analysis for given substation_id",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -343,7 +343,7 @@
         "description" : "Calculates the voltage deviation from the delivered data for the specified subsation",
         "parameters" : [ {
           "in" : "query",
-          "name" : "substationId",
+          "name" : "substation_id",
           "description" : "the id of the substation for which to get the data",
           "required" : false,
           "schema" : {
@@ -352,7 +352,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Gives the voltage deviation analysis for given substationId",
+            "description" : "Gives the voltage deviation analysis for given substation_id",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -395,7 +395,7 @@
           "data" : {
             "type" : "object",
             "example" : {
-              "substationId" : "missing field"
+              "substation_id" : "missing field"
             }
           }
         }
@@ -410,9 +410,10 @@
           },
           "data" : {
             "type" : "object",
-            "required" : [ "substationId" ],
+            "nullable" : true,
+            "required" : [ "substation_id" ],
             "properties" : {
-              "substationId" : {
+              "substation_id" : {
                 "type" : "string"
               }
             }
