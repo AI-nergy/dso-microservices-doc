@@ -262,14 +262,14 @@
         }, {
           "in" : "query",
           "name" : "quantiles",
-          "description" : "Array of quantiles for which to return the values, items can be any numbers in range 0-1. Optional, default: [0.05, 0.5, 0.95]",
+          "description" : "Array of quantiles for which to return the values, items can be any numbers in range 0-1. Optional, default: [0.1, 0.5, 0.9]",
           "required" : false,
           "schema" : {
             "type" : "array",
             "items" : {
               "type" : "string"
             },
-            "example" : [ "0.05", "0.5", "0.95" ]
+            "example" : [ "0.1", "0.5", "0.95" ]
           }
         } ],
         "responses" : {
@@ -436,7 +436,8 @@
               "type" : "object",
               "properties" : {
                 "timestamp" : {
-                  "type" : "integer"
+                  "type" : "string",
+                  "description" : "ISO Date, UTC"
                 },
                 "data" : {
                   "type" : "object",
@@ -498,7 +499,8 @@
               "type" : "object",
               "properties" : {
                 "timestamp" : {
-                  "type" : "integer"
+                  "type" : "string",
+                  "description" : "ISO Date, UTC"
                 },
                 "data" : {
                   "type" : "object",
@@ -532,12 +534,19 @@
               "type" : "object",
               "properties" : {
                 "timestamp" : {
-                  "type" : "integer"
+                  "type" : "string",
+                  "description" : "ISO date, UTC"
                 },
                 "data" : {
                   "type" : "object",
                   "properties" : {
-                    "voltage_deviation" : {
+                    "voltage_deviation_line_1" : {
+                      "type" : "number"
+                    },
+                    "voltage_deviation_line_2" : {
+                      "type" : "number"
+                    },
+                    "voltage_deviation_line_3" : {
                       "type" : "number"
                     }
                   }
