@@ -441,6 +441,7 @@
                 },
                 "data" : {
                   "type" : "object",
+                  "description" : "values in expected, lower and upper fields are generated from fixed quantiles",
                   "properties" : {
                     "expected" : {
                       "type" : "number"
@@ -451,8 +452,9 @@
                     "upper" : {
                       "type" : "number"
                     },
-                    "quantile" : {
+                    "quantiles" : {
                       "type" : "object",
+                      "description" : "a key-value pair where keys are quantiles specified in the input parameter \"quantiles\"",
                       "additionalProperties" : {
                         "type" : "number"
                       },
