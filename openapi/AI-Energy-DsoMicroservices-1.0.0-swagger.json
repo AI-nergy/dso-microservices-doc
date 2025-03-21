@@ -268,11 +268,8 @@
           "description" : "Array of quantiles for which to return the values, items can be any numbers in range 0-1. Optional, default: [0.1, 0.5, 0.9]",
           "required" : false,
           "schema" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            },
-            "example" : [ "0.1", "0.5", "0.9" ]
+            "type" : "string",
+            "example" : "[\"0.1\", \"0.5\", \"0.9\"]"
           }
         } ],
         "responses" : {

@@ -14,12 +14,21 @@
   },
   "servers": [
     {
-      "url": "https://virtserver.swaggerhub.com/AI-Energy/DsoMicroservices/1.0.0",
-      "description": "SwaggerHub API Auto Mocking"
+      "url": "https://dso-microservices.azurewebsites.net/api",
+      "description": "dso-microservices PROD"
     },
     {
-      "url": "https://virtserver.swaggerhub.com/AI-Energy/DSO-Microservices/1.0.0",
-      "description": "Production server"
+      "url": "https://dso-microservices-stage.azurewebsites.net/api",
+      "description": "dso-microservices STAGE"
+    },
+    {
+      "url": "http://localhost:7071/api",
+      "description": "localhost DEV"
+    }
+  ],
+  "security": [
+    {
+      "ApiKeyAuth": []
     }
   ],
   "tags": [
@@ -45,19 +54,16 @@
         "summary": "activates a substation",
         "description": "Activates the substation and starts the billing\n",
         "operationId": "substationActivate",
-        "parameters": [
-          {
-            "name": "substationId",
-            "in": "query",
-            "description": "The id of the substation",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "description": "Substation which to activate",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/substation_activate_body"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Substation successfully activated",
@@ -90,19 +96,16 @@
         "summary": "deactivates a substation",
         "description": "Deactivates the substation and ends the billing\n",
         "operationId": "substationDeactivate",
-        "parameters": [
-          {
-            "name": "substationId",
-            "in": "query",
-            "description": "The id of the substation",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "description": "Substation which to deactivate",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/substation_deactivate_body"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Substation successfully deactivated",
@@ -135,19 +138,6 @@
         "summary": "updates metadata for a station",
         "description": "Updates metadata for a station, should be called only when metadata changes. Data can be changed only for an activated substation\n",
         "operationId": "substationUpdate",
-        "parameters": [
-          {
-            "name": "substationId",
-            "in": "query",
-            "description": "The id of the substation",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "description": "New substation metadata",
           "content": {
@@ -234,10 +224,10 @@
         ],
         "summary": "Get temperature forecast for a given substation",
         "description": "Gets temperature forecast....",
-        "operationId": "addInventory2",
+        "operationId": "forecastTemperature",
         "parameters": [
           {
-            "name": "substationId",
+            "name": "substation_id",
             "in": "query",
             "description": "the id of the substation for which to get the data",
             "required": true,
@@ -246,11 +236,23 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "quantiles",
+            "in": "query",
+            "description": "Array of quantiles for which to return the values, items can be any numbers in range 0-1. Optional, default: [0.1, 0.5, 0.9]",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "example": "[\"0.1\", \"0.5\", \"0.9\"]"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Gives the temperature forecats for given substationId",
+            "description": "Gives the temperature forecats for given substation_id",
             "content": {
               "application/json": {
                 "schema": {
@@ -282,7 +284,7 @@
         "operationId": "analysisPhaseImbalance",
         "parameters": [
           {
-            "name": "substationId",
+            "name": "substation_id",
             "in": "query",
             "description": "the id of the substation for which to get the results",
             "required": false,
@@ -295,7 +297,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Gives the phase imbalnace analysis for given substationId",
+            "description": "Gives the phase imbalnace analysis for given substation_id",
             "content": {
               "application/json": {
                 "schema": {
@@ -327,7 +329,7 @@
         "operationId": "analysisVoltageDeviation",
         "parameters": [
           {
-            "name": "substationId",
+            "name": "substation_id",
             "in": "query",
             "description": "the id of the substation for which to get the data",
             "required": false,
@@ -340,7 +342,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Gives the voltage deviation analysis for given substationId",
+            "description": "Gives the voltage deviation analysis for given substation_id",
             "content": {
               "application/json": {
                 "schema": {
@@ -378,10 +380,11 @@
           "data": {
             "type": "object",
             "example": {
-              "substationId": "missing field"
+              "substation_id": "missing field"
             }
           }
-        }
+        },
+        "description": "The error response used by all endpoints"
       },
       "SaveSuccessResponse": {
         "required": [
@@ -405,9 +408,6 @@
         ],
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
           "warnings": {
             "type": "array",
             "items": {
@@ -415,7 +415,10 @@
             }
           },
           "result": {
-            "$ref": "#/components/schemas/ResultForecastTemperature_result"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultForecastTemperature_result"
+            }
           }
         }
       },
@@ -425,9 +428,6 @@
         ],
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
           "warnings": {
             "type": "array",
             "items": {
@@ -435,7 +435,10 @@
             }
           },
           "result": {
-            "$ref": "#/components/schemas/ResultAnalysisPhaseImbalance_result"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultAnalysisPhaseImbalance_result"
+            }
           }
         }
       },
@@ -445,9 +448,6 @@
         ],
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
           "warnings": {
             "type": "array",
             "items": {
@@ -455,7 +455,10 @@
             }
           },
           "result": {
-            "$ref": "#/components/schemas/ResultAnalysisVoltageDeviation_result"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultAnalysisVoltageDeviation_result"
+            }
           }
         }
       },
@@ -467,8 +470,12 @@
         ],
         "type": "object",
         "properties": {
-          "substation": {
-            "$ref": "#/components/schemas/SubstationMetadata_substation"
+          "id": {
+            "type": "string",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/SubstationMetadata_metadata"
           }
         }
       },
@@ -480,7 +487,86 @@
           }
         }
       },
+      "TransformerData": {
+        "required": [
+          "electrical",
+          "thermal"
+        ],
+        "type": "object",
+        "properties": {
+          "electrical": {
+            "$ref": "#/components/schemas/TransformerData_electrical"
+          },
+          "thermal": {
+            "$ref": "#/components/schemas/TransformerData_thermal"
+          }
+        }
+      },
+      "ElectricalLinePhaseData": {
+        "required": [
+          "current",
+          "energy",
+          "power",
+          "voltage"
+        ],
+        "type": "object",
+        "properties": {
+          "current": {
+            "$ref": "#/components/schemas/ElectricalWave"
+          },
+          "voltage": {
+            "$ref": "#/components/schemas/ElectricalWave"
+          },
+          "power": {
+            "$ref": "#/components/schemas/ElectricalLinePhaseData_power"
+          },
+          "energy": {
+            "$ref": "#/components/schemas/ElectricalLinePhaseData_energy"
+          }
+        }
+      },
+      "ElectricalLineNeutralData": {
+        "required": [
+          "current"
+        ],
+        "type": "object",
+        "properties": {
+          "current": {
+            "$ref": "#/components/schemas/ElectricalWave"
+          }
+        }
+      },
+      "ElectricalWave": {
+        "required": [
+          "rms"
+        ],
+        "type": "object",
+        "properties": {
+          "rms": {
+            "type": "number"
+          },
+          "waveform_peak": {
+            "type": "number"
+          },
+          "crest_factor": {
+            "type": "number"
+          },
+          "thd": {
+            "$ref": "#/components/schemas/ElectricalWave_thd"
+          },
+          "spectrum": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ElectricalWave_spectrum"
+            }
+          }
+        }
+      },
       "Location": {
+        "required": [
+          "latitude",
+          "longitude"
+        ],
         "type": "object",
         "properties": {
           "latitude": {
@@ -494,47 +580,9 @@
           }
         }
       },
-      "TimeSeries": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "number"
-        },
-        "description": "A series of timestamp, value pairs",
-        "example": {
-          "1698283186": 7.4,
-          "1698283201": 123.24
-        }
-      },
-      "TimeSeries2": {
-        "type": "array",
-        "description": "A series of timestamp, value pairs",
-        "example": [
-          {
-            "timestamp": 1698283186,
-            "value": 7.4
-          },
-          {
-            "timestamp": 1698283201,
-            "value": 123.24
-          }
-        ],
-        "items": {
-          "$ref": "#/components/schemas/TimeSeries2_inner"
-        }
-      },
-      "ErrorCode": {
-        "type": "string",
-        "description": "INVALID_INPUT_DATA - Some of the input data was invalid, see message for details\n\nAPPLICATION_ERROR - There was an error in the application, shuold be reported\n",
-        "example": "INVALID_INPUT_DATA",
-        "enum": [
-          "INVALID_INPUT_DATA",
-          "APPLICATION_ERROR"
-        ]
-      },
       "ResultWarningForecastTemperature": {
         "required": [
           "code",
-          "data",
           "message"
         ],
         "type": "object",
@@ -554,7 +602,6 @@
       "ResultWarningAnalysisPhaseImbalance": {
         "required": [
           "code",
-          "data",
           "message"
         ],
         "type": "object",
@@ -573,7 +620,6 @@
       "ResultWarningAnalysisVoltageDeviation": {
         "required": [
           "code",
-          "data",
           "message"
         ],
         "type": "object",
@@ -588,6 +634,15 @@
             "type": "object"
           }
         }
+      },
+      "ErrorCode": {
+        "type": "string",
+        "description": "- ERROR_CODE_INVALID_INPUT_DATA - Some of the input data was invalid, see data for details\n\n- ERROR_CODE_APPLICATION_ERROR - There was an error in the application, shuold be reported\n",
+        "example": "ERROR_INVALID_INPUT_DATA",
+        "enum": [
+          "ERROR_INVALID_INPUT_DATA",
+          "ERROR_APPLICATION_ERROR"
+        ]
       },
       "WarningCodeForecastTemperature": {
         "type": "string",
@@ -613,6 +668,41 @@
           "WARNING_VOLTAGE_DEVIATION"
         ]
       },
+      "substationactivate_substation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          }
+        }
+      },
+      "substation_activate_body": {
+        "type": "object",
+        "properties": {
+          "substation": {
+            "$ref": "#/components/schemas/substationactivate_substation"
+          }
+        }
+      },
+      "substationdeactivate_substation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "substation_deactivate_body": {
+        "type": "object",
+        "properties": {
+          "substation": {
+            "$ref": "#/components/schemas/substationdeactivate_substation"
+          }
+        }
+      },
       "substation_update_body": {
         "type": "object",
         "properties": {
@@ -624,26 +714,49 @@
           }
         }
       },
-      "substation_data_body": {
+      "substationdata_substation": {
+        "required": [
+          "id"
+        ],
         "type": "object",
         "properties": {
-          "substationId": {
+          "id": {
             "type": "string"
+          }
+        }
+      },
+      "substation_data_body": {
+        "required": [
+          "substation",
+          "timestamp",
+          "transformer"
+        ],
+        "type": "object",
+        "properties": {
+          "substation": {
+            "$ref": "#/components/schemas/substationdata_substation"
           },
           "transformer": {
-            "type": "object"
+            "$ref": "#/components/schemas/TransformerData"
+          },
+          "timestamp": {
+            "type": "integer"
           }
         }
       },
       "SaveSuccessResponse_data": {
+        "required": [
+          "substation_id"
+        ],
         "type": "object",
         "properties": {
-          "substationId": {
+          "substation_id": {
             "type": "string"
           }
-        }
+        },
+        "nullable": true
       },
-      "ResultForecastTemperature_result_contributors": {
+      "ResultForecastTemperature_data_contributors": {
         "type": "object",
         "properties": {
           "contributor": {
@@ -654,49 +767,104 @@
           }
         }
       },
-      "ResultForecastTemperature_result": {
+      "ResultForecastTemperature_data": {
         "type": "object",
         "properties": {
           "expected": {
-            "type": "object"
+            "type": "number"
           },
           "lower": {
-            "type": "object"
+            "type": "number"
           },
           "upper": {
-            "type": "object"
+            "type": "number"
           },
-          "quantile": {
-            "type": "object"
+          "quantiles": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            },
+            "description": "a key-value pair where keys are quantiles specified in the input parameter \"quantiles\"",
+            "example": {
+              "0.05": 23.4422666666667,
+              "0.5": 24.3985833333333,
+              "0.95": 22.5100666666667
+            }
           },
           "contributors": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ResultForecastTemperature_result_contributors"
+              "$ref": "#/components/schemas/ResultForecastTemperature_data_contributors"
             }
+          }
+        },
+        "description": "values in \"expected\", \"lower\" and \"upper\" fields are generated from fixed quantiles"
+      },
+      "ResultForecastTemperature_result": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "description": "ISO Date, UTC"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ResultForecastTemperature_data"
+          }
+        }
+      },
+      "ResultAnalysisPhaseImbalance_data": {
+        "type": "object",
+        "properties": {
+          "current_unbalance_factor": {
+            "type": "number"
+          },
+          "voltage_unbalace_factor": {
+            "type": "number"
           }
         }
       },
       "ResultAnalysisPhaseImbalance_result": {
         "type": "object",
         "properties": {
-          "currentUnbalanceFactor": {
-            "type": "object"
+          "timestamp": {
+            "type": "string",
+            "description": "ISO Date, UTC"
           },
-          "voltageUnbalacefactor": {
-            "type": "object"
+          "data": {
+            "$ref": "#/components/schemas/ResultAnalysisPhaseImbalance_data"
+          }
+        }
+      },
+      "ResultAnalysisVoltageDeviation_data": {
+        "type": "object",
+        "properties": {
+          "voltage_deviation_line_1": {
+            "type": "number"
+          },
+          "voltage_deviation_line_2": {
+            "type": "number"
+          },
+          "voltage_deviation_line_3": {
+            "type": "number"
           }
         }
       },
       "ResultAnalysisVoltageDeviation_result": {
         "type": "object",
         "properties": {
-          "voltageDeviation": {
-            "$ref": "#/components/schemas/TimeSeries"
+          "timestamp": {
+            "type": "string",
+            "description": "ISO date, UTC"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ResultAnalysisVoltageDeviation_data"
           }
         }
       },
-      "SubstationMetadata_substation_metadata": {
+      "SubstationMetadata_metadata": {
+        "required": [
+          "location"
+        ],
         "type": "object",
         "properties": {
           "label": {
@@ -710,18 +878,6 @@
           },
           "transformer": {
             "type": "object"
-          }
-        }
-      },
-      "SubstationMetadata_substation": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-          },
-          "metadata": {
-            "$ref": "#/components/schemas/SubstationMetadata_substation_metadata"
           }
         }
       },
@@ -739,16 +895,165 @@
           }
         }
       },
-      "TimeSeries2_inner": {
+      "TransformerData_electrical_secondary_frequency": {
         "type": "object",
         "properties": {
-          "timestamp": {
-            "type": "integer"
-          },
-          "value": {
+          "instantaneous": {
             "type": "number"
           }
         }
+      },
+      "TransformerData_electrical_secondary": {
+        "required": [
+          "line_1",
+          "line_2",
+          "line_3",
+          "neutral"
+        ],
+        "type": "object",
+        "properties": {
+          "line_1": {
+            "$ref": "#/components/schemas/ElectricalLinePhaseData"
+          },
+          "line_2": {
+            "$ref": "#/components/schemas/ElectricalLinePhaseData"
+          },
+          "line_3": {
+            "$ref": "#/components/schemas/ElectricalLinePhaseData"
+          },
+          "neutral": {
+            "$ref": "#/components/schemas/ElectricalLineNeutralData"
+          },
+          "frequency": {
+            "$ref": "#/components/schemas/TransformerData_electrical_secondary_frequency"
+          }
+        }
+      },
+      "TransformerData_electrical": {
+        "required": [
+          "secondary"
+        ],
+        "type": "object",
+        "properties": {
+          "secondary": {
+            "$ref": "#/components/schemas/TransformerData_electrical_secondary"
+          }
+        }
+      },
+      "TransformerData_thermal_top_oil": {
+        "required": [
+          "temperature"
+        ],
+        "type": "object",
+        "properties": {
+          "temperature": {
+            "type": "number"
+          }
+        }
+      },
+      "TransformerData_thermal_radiator": {
+        "type": "object",
+        "properties": {
+          "temperature": {
+            "type": "number"
+          }
+        }
+      },
+      "TransformerData_thermal": {
+        "required": [
+          "top_oil"
+        ],
+        "type": "object",
+        "properties": {
+          "top_oil": {
+            "$ref": "#/components/schemas/TransformerData_thermal_top_oil"
+          },
+          "radiator": {
+            "$ref": "#/components/schemas/TransformerData_thermal_radiator"
+          }
+        }
+      },
+      "ElectricalLinePhaseData_power_power_factor": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number"
+          }
+        }
+      },
+      "ElectricalLinePhaseData_power": {
+        "type": "object",
+        "properties": {
+          "active": {
+            "type": "number"
+          },
+          "reactive": {
+            "type": "number"
+          },
+          "apparent": {
+            "type": "number"
+          },
+          "power_factor": {
+            "$ref": "#/components/schemas/ElectricalLinePhaseData_power_power_factor"
+          }
+        }
+      },
+      "ElectricalLinePhaseData_energy_active": {
+        "type": "object",
+        "properties": {
+          "imported": {
+            "type": "number"
+          },
+          "exported": {
+            "type": "number"
+          }
+        }
+      },
+      "ElectricalLinePhaseData_energy": {
+        "type": "object",
+        "properties": {
+          "active": {
+            "$ref": "#/components/schemas/ElectricalLinePhaseData_energy_active"
+          },
+          "reactive": {
+            "$ref": "#/components/schemas/ElectricalLinePhaseData_energy_active"
+          },
+          "apparent": {
+            "$ref": "#/components/schemas/ElectricalLinePhaseData_energy_active"
+          }
+        }
+      },
+      "ElectricalWave_thd": {
+        "type": "object",
+        "properties": {
+          "rms": {
+            "type": "number"
+          },
+          "fundamental": {
+            "type": "number"
+          }
+        }
+      },
+      "ElectricalWave_spectrum": {
+        "type": "object",
+        "properties": {
+          "centroid": {
+            "type": "number"
+          },
+          "range": {
+            "type": "number"
+          },
+          "magnitude": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "name": "x-functions-key",
+        "in": "header"
       }
     }
   }
