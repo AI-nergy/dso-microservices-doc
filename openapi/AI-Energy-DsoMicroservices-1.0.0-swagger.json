@@ -8,7 +8,7 @@
     "url" : "https://dso-microservices-stage.azurewebsites.net/api"
   }, {
     "description" : "dso-microservices-new NEW PROD",
-    "url" : "https://dso-microservices-stage-new.azurewebsites.net/api"
+    "url" : "https://dso-microservices-new.azurewebsites.net/api"
   }, {
     "description" : "localhost DEV",
     "url" : "http://localhost:7071/api"
