@@ -8,10 +8,10 @@
     "url" : "https://dso-microservices-stage.azurewebsites.net/api"
   }, {
     "description" : "dso-microservices-new NEW PROD",
-    "url" : "https://dso-microservices-new.azurewebsites.net/api"
+    "url" : "https://dsoms.ai-nergy.net/api"
   }, {
     "description" : "dso-microservices-new NEW STAGE",
-    "url" : "https://dso-microservices-new-stage.azurewebsites.net/api"
+    "url" : "https://dsoms-stage.ai-nergy.net/api"
   }, {
     "description" : "localhost DEV",
     "url" : "http://localhost:7071/api"
