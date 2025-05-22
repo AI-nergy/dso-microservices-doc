@@ -8,7 +8,7 @@
     "url" : "https://dsoms-stage.ai-nergy.net/api"
    }, {
     "description" : "localhost DEV",
-    "url" : "http://localhost:7071/api"
+    "url" : "http://localhost/api"
   } ],
   "info" : {
     "description" : "Microservices for gathering and analysing the data from DSOs",
