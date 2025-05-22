@@ -7,12 +7,6 @@
     "description" : "dso-microservices-new STAGE",
     "url" : "https://dsoms-stage.ai-nergy.net/api"
    }, {
-    "description" : "OLD dso-microservices PROD",
-    "url" : "https://dso-microservices.azurewebsites.net/api"
-  }, {
-    "description" : "OLD dso-microservices STAGE",
-    "url" : "https://dso-microservices-stage.azurewebsites.net/api"
-  }, {
     "description" : "localhost DEV",
     "url" : "http://localhost:7071/api"
   } ],
