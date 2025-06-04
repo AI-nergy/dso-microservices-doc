@@ -6,7 +6,10 @@
   }, {
     "description" : "dso-microservices-new STAGE",
     "url" : "https://dsoms-stage.ai-nergy.net/api"
-   }, {
+  }, {
+    "description" : "dso-microservices-new TEST",
+    "url" : "https://dso-microservices-new-test.azurewebsites.net/api"
+  }, {
     "description" : "localhost DEV",
     "url" : "http://localhost/api"
   } ],
