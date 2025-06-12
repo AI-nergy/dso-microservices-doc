@@ -10,8 +10,11 @@
     "description" : "dso-microservices-new TEST",
     "url" : "https://dso-microservices-new-test.azurewebsites.net/api"
   }, {
-    "description" : "localhost DEV",
+    "description" : "localhost DEV Docker",
     "url" : "http://localhost/api"
+  }, {
+    "description" : "localhost DEV Azurite",
+    "url" : "http://localhost:7071/api"
   } ],
   "info" : {
     "description" : "Microservices for gathering and analysing the data from DSOs",
