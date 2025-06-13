@@ -272,7 +272,7 @@
           "in" : "query",
           "name" : "forecast_datetime",
           "description" : "Optional, the date and time for which to get the forecast. Default: current date and time",
-          "required" : true,
+          "required" : false,
           "schema" : {
             "type" : "string"
           }
@@ -280,7 +280,7 @@
           "in" : "query",
           "name" : "max_step_ahead_minutes",
           "description" : "Optional, the maixumum step ahead minutes to get in the forecast. Default: 48 * 60 (48 hours)",
-          "required" : true,
+          "required" : false,
           "schema" : {
             "type" : "string"
           }
