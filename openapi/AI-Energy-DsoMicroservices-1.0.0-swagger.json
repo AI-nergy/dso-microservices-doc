@@ -314,7 +314,7 @@
       "get" : {
         "tags" : [ "Results" ],
         "summary" : "Get temperature forecast for a given substation",
-        "operationId" : "forecastTemperature",
+        "operationId" : "forecastTemperatureHistory",
         "description" : "Gets temperature forecast....",
         "parameters" : [ {
           "in" : "query",
