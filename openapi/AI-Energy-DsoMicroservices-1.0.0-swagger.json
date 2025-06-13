@@ -270,14 +270,86 @@
           }
         }, {
           "in" : "query",
-          "name" : "quantiles",
-          "description" : "Array of quantiles for which to return the values, items can be any numbers in range 0-1. Optional, default: [0.1, 0.5, 0.9]",
-          "required" : false,
+          "name" : "forecast_datetime",
+          "description" : "Optional, the date and time for which to get the forecast. Default: current date and time",
+          "required" : true,
           "schema" : {
-            "type" : "string",
-            "example" : "[0.1, 0.5, 0.9]"
+            "type" : "string"
           }
-        } ],
+        }, {
+          "in" : "query",
+          "name" : "max_step_ahead_minutes",
+          "description" : "Optional, the maixumum step ahead minutes to get in the forecast. Default: 48 * 60 (48 hours)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } 
+      ],
+        "responses" : {
+          "200" : {
+            "description" : "Gives the temperature forecats for given substation_id",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResultForecastTemperature"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input data or error in the API",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forecast/temperature/history" : {
+      "get" : {
+        "tags" : [ "Results" ],
+        "summary" : "Get temperature forecast for a given substation",
+        "operationId" : "forecastTemperature",
+        "description" : "Gets temperature forecast....",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "substation_id",
+          "description" : "the id of the substation for which to get the data",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "start_datetime",
+          "description" : "start date and time for which to get the data",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "end_datetime",
+          "description" : "end date and time for which to get the temperature forecast history",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "step_ahead_minutes",
+          "description" : "step ahead minutes for which to get the temperature forecast history",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }
+       ],
         "responses" : {
           "200" : {
             "description" : "Gives the temperature forecats for given substation_id",
