@@ -279,7 +279,7 @@
         }, {
           "in" : "query",
           "name" : "max_step_ahead_minutes",
-          "description" : "The maximum step ahead minutes for which to retreive the forecast. Optional, default: 7 * 24 * 60 (7 days)",
+          "description" : "The maximum step ahead minutes for which to retreive the forecast. Optional, default: 10080 (7 days)",
           "required" : false,
           "schema" : {
             "type" : "integer",
