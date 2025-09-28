@@ -270,6 +270,24 @@
           }
         }, {
           "in" : "query",
+          "name" : "forecast_datetime",
+          "description" : "The forecast date and time for which to retreive the forecast. It can be an ISO date or a unix timestamp. It will be truncated to the nearest hour. Optional, default: current time",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "example" : "2025-01-01T:06:00:00"
+          }
+        }, {
+          "in" : "query",
+          "name" : "max_step_ahead_minutes",
+          "description" : "The maximum step aherad minutes for which to retreive the forecast. Optional, default: 7 * 24 * 60 (7 days)",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "example" : "2880"
+          }
+        }, {
+          "in" : "query",
           "name" : "quantiles",
           "description" : "Array of quantiles for which to return the values, items can be any numbers in range 0-1. Optional, default: [0.1, 0.5, 0.9]",
           "required" : false,
