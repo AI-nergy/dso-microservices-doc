@@ -271,7 +271,7 @@
         }, {
           "in" : "query",
           "name" : "forecast_datetime",
-          "description" : "The forecast date and time for which to retreive the forecast. It can be an ISO date or a unix timestamp. It will be truncated to the nearest hour. Optional, default: current time",
+          "description" : "The forecast date and time for which to retreive the forecast. It can be an ISO date or a unix timestamp. It will be truncated to the nearest hour.\n Optional, default: current time",
           "required" : false,
           "schema" : {
             "type" : "string",
@@ -280,7 +280,7 @@
         }, {
           "in" : "query",
           "name" : "max_step_ahead_minutes",
-          "description" : "The maximum step aherad minutes for which to retreive the forecast. Optional, default: 7 * 24 * 60 (7 days)",
+          "description" : "The maximum step ahead minutes for which to retreive the forecast. Optional, default: 7 * 24 * 60 (7 days)",
           "required" : false,
           "schema" : {
             "type" : "integer",
