@@ -271,11 +271,10 @@
         }, {
           "in" : "query",
           "name" : "forecast_datetime",
-          "description" : "The forecast date and time for which to retreive the forecast. It can be an ISO date or a unix timestamp. It will be truncated to the nearest hour.\n\nOptional, default: current time",
+          "description" : "The forecast date and time for which to retreive the forecast. It can be an ISO date or a unix timestamp. It will be truncated to the nearest hour.\n\nOptional, default: current time\n\nExample: 2025-01-01T:00:00:00",
           "required" : false,
           "schema" : {
-            "type" : "string",
-            "example" : "2025-01-01T:06:00:00"
+            "type" : "string"
           }
         }, {
           "in" : "query",
@@ -284,7 +283,7 @@
           "required" : false,
           "schema" : {
             "type" : "integer",
-            "example" : "2880"
+            "example" : "10080"
           }
         }, {
           "in" : "query",
