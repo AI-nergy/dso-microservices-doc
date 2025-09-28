@@ -271,8 +271,7 @@
         }, {
           "in" : "query",
           "name" : "forecast_datetime",
-          "description" : "The forecast date and time for which to retreive the forecast. It can be an ISO date or a unix timestamp. It will be truncated to the nearest hour.  
-          Optional, default: current time",
+          "description" : "The forecast date and time for which to retreive the forecast. It can be an ISO date or a unix timestamp. It will be truncated to the nearest hour.\n\nOptional, default: current time",
           "required" : false,
           "schema" : {
             "type" : "string",
