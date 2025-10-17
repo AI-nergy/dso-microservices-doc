@@ -339,7 +339,7 @@
           "description" : "The forecast date and time from which to retreive the forecast history. It can be an ISO date or a unix timestamp.",
           "required" : true,
           "schema" : {
-            "type" : "integer"
+            "type" : "string"
           }
         }, {
           "in" : "query",
@@ -347,7 +347,7 @@
           "description" : "The forecast date and time until which to retreive the forecast history. It can be an ISO date or a unix timestamp.",
           "required" : true,
           "schema" : {
-            "type" : "integer"
+            "type" : "string"
           }
         }, {
           "in" : "query",
