@@ -336,7 +336,7 @@
         }, {
           "in" : "query",
           "name" : "date_from",
-          "description" : "The forecast date and time from which to retreive the forecast history. It can be an ISO date or a unix timestamp.",
+          "description" : "The forecast date and time from which to retreive the forecast history (INCLUSIVE). It can be an ISO date or a unix timestamp.",
           "required" : true,
           "schema" : {
             "type" : "string"
@@ -344,7 +344,7 @@
         }, {
           "in" : "query",
           "name" : "date_to",
-          "description" : "The forecast date and time until which to retreive the forecast history. It can be an ISO date or a unix timestamp.",
+          "description" : "The forecast date and time until which to retreive the forecast history (EXCLUSIVE). It can be an ISO date or a unix timestamp.",
           "required" : true,
           "schema" : {
             "type" : "string"
@@ -356,7 +356,7 @@
           "required" : false,
           "schema" : {
             "type" : "integer",
-            "example" : "10080"
+            "example" : "120"
           }
         } ],
         "responses" : {
