@@ -324,7 +324,7 @@
         "tags" : [ "Results" ],
         "summary" : "Get temperature forecast history for a given substation",
         "operationId" : "forecastTemperatureHistory",
-        "description" : "Gets temperature forecast history for a given substation, dateFrom and dateTo",
+        "description" : "Gets temperature forecast history for a given substation, date_from and date_to",
         "parameters" : [ {
           "in" : "query",
           "name" : "substation_id",
@@ -335,7 +335,7 @@
           }
         }, {
           "in" : "query",
-          "name" : "dateFrom",
+          "name" : "date_from",
           "description" : "The forecast date and time from which to retreive the forecast history. It can be an ISO date or a unix timestamp.",
           "required" : true,
           "schema" : {
@@ -343,7 +343,7 @@
           }
         }, {
           "in" : "query",
-          "name" : "dateTo",
+          "name" : "date_to",
           "description" : "The forecast date and time until which to retreive the forecast history. It can be an ISO date or a unix timestamp.",
           "required" : true,
           "schema" : {
@@ -352,7 +352,7 @@
         }, {
           "in" : "query",
           "name" : "step_ahead_minutes",
-          "description" : "The  step ahead minutes for which to retreive the forecast. Optional, default: return forecast for all existing step_head_minutes",
+          "description" : "The step ahead minutes for which to retreive the forecast. Optional, default: return forecast for all existing step_head_minutes",
           "required" : false,
           "schema" : {
             "type" : "integer",
