@@ -409,7 +409,7 @@
           "required" : false,
           "schema" : {
             "type" : "integer",
-            "example" : "120"
+            "example" : "360"
           }
         } ],
         "responses" : {
