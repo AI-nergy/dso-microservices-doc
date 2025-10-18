@@ -270,7 +270,7 @@
           "description" : "The JSON structure that defines fields to get. Optional, default: return all fields.\n\nExample: {\"transformer\":{\"thermal\":{\"top_oil\":{\"temperature\":1}}}}",
           "required" : false,
           "schema" : {
-            "type" : "integer"
+            "type" : "string"
           }
         } ],
         "responses" : {
