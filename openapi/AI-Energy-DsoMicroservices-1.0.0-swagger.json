@@ -461,7 +461,7 @@
         }, {
           "in" : "query",
           "name" : "date_to",
-          "description" : "The date and time until which to retreive the analysis (EXCLUSIVE). It can be an ISO date or a unix timestamp. Optional, default: current date and time",
+          "description" : "The date and time until which to retreive the analysis (INCLUSIVE). It can be an ISO date or a unix timestamp. Optional, default: current date and time",
           "required" : false,
           "schema" : {
             "type" : "string"
@@ -516,7 +516,7 @@
         }, {
           "in" : "query",
           "name" : "date_to",
-          "description" : "The date and time until which to retreive the analysis (EXCLUSIVE). It can be an ISO date or a unix timestamp. Optional, default: current date and time",
+          "description" : "The date and time until which to retreive the analysis (INCLUSIVE). It can be an ISO date or a unix timestamp. Optional, default: current date and time",
           "required" : true,
           "schema" : {
             "type" : "string"
