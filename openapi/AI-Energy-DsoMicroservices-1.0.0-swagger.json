@@ -509,7 +509,7 @@
           "in" : "query",
           "name" : "date_from",
           "description" : "The date and time from which to retreive the analysis (INCLUSIVE). It can be an ISO date or a unix timestamp. Optional, default: current date and time minus 7 days",
-          "required" : true,
+          "required" : false,
           "schema" : {
             "type" : "string"
           }
@@ -517,7 +517,7 @@
           "in" : "query",
           "name" : "date_to",
           "description" : "The date and time until which to retreive the analysis (INCLUSIVE). It can be an ISO date or a unix timestamp. Optional, default: current date and time",
-          "required" : true,
+          "required" : false,
           "schema" : {
             "type" : "string"
           }
